@@ -1,8 +1,8 @@
-import { Admin, EditGuesser, Resource, ShowGuesser } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import { Layout } from "./Layout";
 import { authProvider } from "./authProvider";
 import { dataProvider } from "./dataProvider";
-import { EventCreate, EventList } from "./objects/event.object";
+import { EventList, EventShow } from "./objects/event.object";
 
 export const App = () => (
     <Admin
@@ -13,9 +13,9 @@ export const App = () => (
         <Resource
             name="events"
             list={EventList}
-            edit={EditGuesser}
-            show={ShowGuesser}
-            create={EventCreate}
+            // edit={EditGuesser}
+            show={EventShow}
+            // create={EventCreate}
         />
     </Admin>
 );
