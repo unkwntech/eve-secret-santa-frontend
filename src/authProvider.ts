@@ -11,6 +11,15 @@ const newGuid = () => {
     );
 };
 
+const cleanup = () => {
+    // Remove the ?code&state from the URL
+    window.history.replaceState(
+        {},
+        window.document.title,
+        window.location.origin
+    );
+};
+
 export const authProvider: AuthProvider = {
     login: () => Promise.resolve(),
     logout: () => {
@@ -35,6 +44,7 @@ export const authProvider: AuthProvider = {
         console.log("handle callback");
         const params = new URLSearchParams(window.location.search);
         if (!params.has("code") && !params.has("state")) {
+            cleanup();
             throw new Error("Invalid Callback");
         }
 
@@ -46,6 +56,7 @@ export const authProvider: AuthProvider = {
                 console.log(res);
                 localStorage.setItem("jwt", res.jwt);
                 localStorage.setItem("user", JSON.stringify(res.user));
+                cleanup();
                 Promise.resolve();
             });
     },
