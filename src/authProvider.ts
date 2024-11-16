@@ -1,44 +1,63 @@
-import { AuthProvider, HttpError } from "react-admin";
-import data from "./users.json";
+import { AuthProvider } from "react-admin";
 
-/**
- * This authProvider is only for test purposes. Don't use it in production.
- */
+const newGuid = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+            var r = (Math.random() * 16) | 0,
+                v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+        }
+    );
+};
+
 export const authProvider: AuthProvider = {
-  login: ({ username, password }) => {
-    const user = data.users.find(
-      (u) => u.username === username && u.password === password,
-    );
+    login: () => Promise.resolve(),
+    logout: () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("jwt");
+        return Promise.resolve();
+    },
+    checkError: () => Promise.resolve(),
+    checkAuth: () => {
+        console.log("check auth");
+        if (!localStorage.getItem("user")) {
+            //redirect to oauth flow
+            window.location.assign(
+                `https://login.eveonline.com/v2/oauth/authorize/?response_type=code&state=${newGuid()}&client_id=583f95eda5bf42ac90135ea7f78f07cb&redirect_uri=http://localhost:5173/%23/auth-callback`
+            );
+            return Promise.reject();
+        }
 
-    if (user) {
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      let { password, ...userToPersist } = user;
-      localStorage.setItem("user", JSON.stringify(userToPersist));
-      return Promise.resolve();
-    }
+        return Promise.resolve();
+    },
+    async handleCallback() {
+        console.log("handle callback");
+        const params = new URLSearchParams(window.location.search);
+        if (!params.has("code") && !params.has("state")) {
+            throw new Error("Invalid Callback");
+        }
 
-    return Promise.reject(
-      new HttpError("Unauthorized", 401, {
-        message: "Invalid username or password",
-      }),
-    );
-  },
-  logout: () => {
-    localStorage.removeItem("user");
-    return Promise.resolve();
-  },
-  checkError: () => Promise.resolve(),
-  checkAuth: () =>
-    localStorage.getItem("user") ? Promise.resolve() : Promise.reject(),
-  getPermissions: () => {
-    return Promise.resolve(undefined);
-  },
-  getIdentity: () => {
-    const persistedUser = localStorage.getItem("user");
-    const user = persistedUser ? JSON.parse(persistedUser) : null;
+        await fetch(
+            `${import.meta.env.VITE_SIMPLE_REST_URL}/oauth/callback/?code=${params.get("code")}`
+        )
+            .then((res) => res.json())
+            .then((res: any) => {
+                console.log(res);
+                localStorage.setItem("jwt", res.jwt);
+                localStorage.setItem("user", JSON.stringify(res.user));
+                Promise.resolve();
+            });
+    },
+    getPermissions: () => {
+        return Promise.resolve(undefined);
+    },
+    getIdentity: () => {
+        const persistedUser = localStorage.getItem("user");
+        const user = persistedUser ? JSON.parse(persistedUser) : null;
 
-    return Promise.resolve(user);
-  },
+        return Promise.resolve(user);
+    },
 };
 
 export default authProvider;
