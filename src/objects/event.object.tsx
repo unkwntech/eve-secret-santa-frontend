@@ -3,7 +3,6 @@ import {
     Datagrid,
     DateField,
     List,
-    ReferenceField,
     ReferenceInput,
     SimpleForm,
     TextField,
@@ -13,12 +12,14 @@ import {
 export const EventList = () => (
     <List>
         <Datagrid>
-            <ReferenceField source="_id" reference="events" />
-            <TextField source="EventName" />
-            <TextField source="OwnerID" />
-            <DateField source="SignupStartDate" />
-            <DateField source="SignupEndDate" />
-            <DateField source="DeliveryDeadline" />
+            <TextField source="EventName" label="Event" />
+            <TextField source="OwnerID" label="Organizer" />
+            <DateField source="SignupStartDate" label="Signups Begin" />
+            <DateField source="SignupEndDate" label="Signups End" />
+            <DateField
+                source="DeliveryDeadline"
+                label="Gift Delivery Deadline"
+            />
         </Datagrid>
     </List>
 );
