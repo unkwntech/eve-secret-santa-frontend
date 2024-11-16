@@ -1,10 +1,13 @@
 import {
+    BooleanField,
     Create,
     Datagrid,
     DateField,
     List,
     ReferenceInput,
+    Show,
     SimpleForm,
+    SimpleShowLayout,
     TextField,
     TextInput,
 } from "react-admin";
@@ -34,4 +37,18 @@ export const EventCreate = () => (
             <DateField source="DeliveryDeadline" />
         </SimpleForm>
     </Create>
+);
+
+export const EventShow = () => (
+    <Show>
+        <SimpleShowLayout>
+            <TextField source="OwnerID" />
+            <TextField source="EventName" />
+            <DateField source="SignupStartDate" />
+            <DateField source="SignupEndDate" />
+            <DateField source="DeliveryDeadline" />
+            <BooleanField source="isPublished" />
+            <BooleanField source="isOpen" />
+        </SimpleShowLayout>
+    </Show>
 );
