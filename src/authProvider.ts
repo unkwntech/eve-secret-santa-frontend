@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { AuthProvider } from "react-admin";
 
 const newGuid = () => {
@@ -29,12 +30,18 @@ export const authProvider: AuthProvider = {
     },
     checkError: () => Promise.resolve(),
     checkAuth: () => {
-        if (!localStorage.getItem("user")) {
+        if (!localStorage.getItem("user") || !localStorage.getItem("jwt")) {
             //redirect to oauth flow
             window.location.assign(
                 `https://login.eveonline.com/v2/oauth/authorize/?response_type=code&state=${newGuid()}&client_id=583f95eda5bf42ac90135ea7f78f07cb&redirect_uri=http://localhost:5173/%23/auth-callback`
             );
             return Promise.reject();
+        }
+
+        let jwt = jwtDecode(localStorage.getItem("jwt") ?? "");
+
+        if (jwt.exp ?? 0 <= Date.now()) {
+            Promise.reject();
         }
 
         return Promise.resolve();
