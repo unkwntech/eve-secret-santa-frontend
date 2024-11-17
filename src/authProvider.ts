@@ -29,7 +29,6 @@ export const authProvider: AuthProvider = {
     },
     checkError: () => Promise.resolve(),
     checkAuth: () => {
-        console.log("check auth");
         if (!localStorage.getItem("user")) {
             //redirect to oauth flow
             window.location.assign(
@@ -41,13 +40,13 @@ export const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     async handleCallback() {
-        console.log("handle callback");
         const params = new URLSearchParams(window.location.search);
         if (!params.has("code") && !params.has("state")) {
             cleanup();
             throw new Error("Invalid Callback");
         }
 
+        //send code to api and get JWT in response
         await fetch(
             `${import.meta.env.VITE_SIMPLE_REST_URL}/oauth/callback/?code=${params.get("code")}`
         )
