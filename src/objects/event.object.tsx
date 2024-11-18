@@ -4,6 +4,7 @@ import {
     Datagrid,
     DateField,
     List,
+    ReferenceField,
     ReferenceInput,
     Show,
     SimpleForm,
@@ -15,8 +16,14 @@ import {
 export const EventList = () => (
     <List>
         <Datagrid>
-            <TextField source="EventName" label="Event" />
-            <TextField source="OwnerID" label="Organizer" />
+            <TextField source="EventName" label="Event" />{" "}
+            <ReferenceField
+                source="OwnerID"
+                reference="santas"
+                label="Organizer"
+            >
+                <TextField source="CharacterName" />
+            </ReferenceField>
             <DateField source="SignupStartDate" label="Signups Begin" />
             <DateField source="SignupEndDate" label="Signups End" />
             <DateField
@@ -42,7 +49,13 @@ export const EventCreate = () => (
 export const EventShow = () => (
     <Show>
         <SimpleShowLayout>
-            <TextField source="OwnerID" />
+            <ReferenceField
+                source="OwnerID"
+                reference="santas"
+                label="Organizer"
+            >
+                <TextField source="CharacterName" />
+            </ReferenceField>
             <TextField source="EventName" />
             <DateField source="SignupStartDate" />
             <DateField source="SignupEndDate" />
