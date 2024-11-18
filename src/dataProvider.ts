@@ -15,18 +15,13 @@ import {
     UpdateParams,
 } from "react-admin";
 
-// export const dataProvider = simpleRestProvider(
-//     import.meta.env.VITE_SIMPLE_REST_URL,
-//     (url: string, options: any) => {
-//         if (!options.headers) {
-//             options.headers = new Headers({ Accet: "application/json" });
-//         }
-//         const token = localStorage.getItem("jwt");
-//         options.headers.set("Authorization", `Bearer ${token}`);
-//         return fetchUtils.fetchJson(url, options);
-//         //https://marmelab.com/react-admin/doc/2.9/Authentication.html#sending-credentials-to-the-api
-//     }
-// );
+const ShapeManyData = (res: any): any => {
+    let data: any = res;
+    if (!Array.isArray(res)) {
+        data = [res];
+    }
+    return data;
+};
 
 const secretSantaDataProvider = {
     getList: async (
@@ -43,8 +38,9 @@ const secretSantaDataProvider = {
         })
             .then((res) => res.json())
             .then((res: any[]) => {
+                let data = res;
                 return {
-                    data: res,
+                    data: ShapeManyData(data),
                     total: res.length,
                     meta: {},
                 };
@@ -90,14 +86,9 @@ const secretSantaDataProvider = {
             }
         )
             .then((res) => res.json())
-            .then((res: any[]) => {
-                console.log({
-                    data: res,
-                    total: res.length,
-                    meta: {},
-                });
+            .then((res: any) => {
                 return {
-                    data: [res],
+                    data: ShapeManyData(res),
                     total: res.length,
                     meta: {},
                 };
@@ -118,7 +109,7 @@ const secretSantaDataProvider = {
                 },
             }
         )
-            .then((res) => res.json())
+            .then((res) => ShapeManyData(res.json()))
             .then((res: any) => {
                 return {
                     data: res,
