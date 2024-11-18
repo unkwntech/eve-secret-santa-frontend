@@ -1,4 +1,3 @@
-import { jwtDecode } from "jwt-decode";
 import { AuthProvider } from "react-admin";
 
 const newGuid = () => {
@@ -38,11 +37,11 @@ export const authProvider: AuthProvider = {
             return Promise.reject();
         }
 
-        let jwt = jwtDecode(localStorage.getItem("jwt") ?? "");
+        // let jwt = jwtDecode(localStorage.getItem("jwt") ?? "");
 
-        if (jwt.exp ?? 0 <= Date.now()) {
-            Promise.reject();
-        }
+        // if (jwt.exp ?? 0 <= Date.now()) {
+        //     Promise.reject();
+        // }
 
         return Promise.resolve();
     },
