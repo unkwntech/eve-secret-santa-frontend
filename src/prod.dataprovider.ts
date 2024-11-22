@@ -23,7 +23,7 @@ const ShapeManyData = (res: any): any => {
     return data;
 };
 
-const secretSantaDataProvider = {
+export const secretSantaDataProvider = {
     getList: async (
         resource: string,
         params: GetListParams
@@ -143,5 +143,3 @@ const secretSantaDataProvider = {
         return Promise.reject();
     },
 };
-
-export const dataProvider = secretSantaDataProvider;
