@@ -32,7 +32,7 @@ export const authProvider: AuthProvider = {
         if (!localStorage.getItem("user") || !localStorage.getItem("jwt")) {
             //redirect to oauth flow
             window.location.assign(
-                `https://login.eveonline.com/v2/oauth/authorize/?response_type=code&state=${newGuid()}&client_id=583f95eda5bf42ac90135ea7f78f07cb&redirect_uri=http://localhost:5173/%23/auth-callback`
+                `https://login.eveonline.com/v2/oauth/authorize/?response_type=code&state=${newGuid()}&client_id=${import.meta.env.CCP_CLIENT_ID}&redirect_uri=${import.meta.env.OAUTH_REDIRECT}`
             );
             return Promise.reject();
         }
