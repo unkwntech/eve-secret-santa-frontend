@@ -1,17 +1,16 @@
 import { Admin, Resource } from "react-admin";
 import { Layout } from "./Layout";
 import { authProvider } from "./authProvider";
-import { devDataProvider } from "./dev.dataprovider";
 import { EventList, EventShow } from "./objects/event.object";
 import { secretSantaDataProvider } from "./prod.dataprovider";
 
 let dataProvider;
 
-if (import.meta.env.DEV === true) {
-    dataProvider = devDataProvider;
-} else {
-    dataProvider = secretSantaDataProvider;
-}
+// if (import.meta.env.DEV === true) {
+//     dataProvider = devDataProvider;
+// } else {
+dataProvider = secretSantaDataProvider;
+//}
 
 export const App = () => (
     <Admin

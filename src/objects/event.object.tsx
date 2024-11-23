@@ -1,5 +1,6 @@
 import {
     BooleanField,
+    Button,
     Create,
     Datagrid,
     DateField,
@@ -11,6 +12,8 @@ import {
     SimpleShowLayout,
     TextField,
     TextInput,
+    TopToolbar,
+    useRecordContext,
 } from "react-admin";
 
 export const EventList = () => (
@@ -46,8 +49,38 @@ export const EventCreate = () => (
     </Create>
 );
 
+export const JoinButton = (props: any) => {
+    const record = useRecordContext();
+    if (!record) return;
+
+    const handleClick = () => {
+        return fetch(
+            `${import.meta.env.VITE_SIMPLE_REST_URL}/events/${record.id}/join`,
+            {
+                method: "put",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+                },
+            }
+        )
+            .then((res) => res.text())
+            .then((res: any) => {
+                alert(res);
+            });
+    };
+    return (
+        <Button onClick={handleClick} aria-label="AddCircleIcon" {...props} />
+    );
+};
+
+export const EventShowActions = () => (
+    <TopToolbar>
+        <JoinButton label="Join" />
+    </TopToolbar>
+);
+
 export const EventShow = () => (
-    <Show>
+    <Show actions={<EventShowActions />}>
         <SimpleShowLayout>
             <ReferenceField
                 source="OwnerID"
