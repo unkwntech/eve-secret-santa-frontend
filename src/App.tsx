@@ -14,6 +14,7 @@ dataProvider = secretSantaDataProvider;
 
 export const App = () => (
     <Admin
+        disableTelemetry
         layout={Layout}
         dataProvider={dataProvider}
         authProvider={authProvider}
