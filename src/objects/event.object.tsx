@@ -1,5 +1,4 @@
 import {
-    BooleanField,
     Button,
     Create,
     Datagrid,
@@ -93,8 +92,7 @@ export const EventShow = () => (
             <DateField source="SignupStartDate" />
             <DateField source="SignupEndDate" />
             <DateField source="DeliveryDeadline" />
-            <BooleanField source="isPublished" />
-            <BooleanField source="isOpen" />
+            <TextField source="MyMatch" />
         </SimpleShowLayout>
     </Show>
 );
